@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"start-up-rh/handler"
 	"start-up-rh/user"
 
@@ -19,15 +18,31 @@ func main() {
 
 	userRepository := user.NewRepository(db)
 	userService := user.NewService(userRepository)
-	userByEmail, err := userRepository.FindByEmail("b@gmail.com")
-	if err != nil {
-		fmt.Println(err.Error())
-	}
 
-	if userByEmail.Id == 0 {
-		fmt.Println("Data user tidak ditemukan")
-	}
-	fmt.Println(userByEmail.Name)
+	//<< untuk mengcek email yang terdaftar di database
+	// userByEmail, err := userRepository.FindByEmail("naro@gmail.com")
+	// if err != nil {
+	// 	fmt.Println(err.Error())
+	// }
+	// if userByEmail.Id == 0 {
+	// 	fmt.Println("Data user tidak ditemukan")
+	// }
+	// fmt.Println(userByEmail.Name)
+	//last code
+
+	//<< code untuk mengecek kecocokan email dan password
+	// input := user.LoginInput{
+	// 	Email:    "naro@gmail.com",
+	// 	Password: "password",
+	// }
+	// user, err := userService.Login(input)
+	// if err != nil {
+	// 	fmt.Println("terjadi kesalahan")
+	// 	fmt.Println(err.Error())
+	// }
+	// fmt.Println(user.Email)
+	// fmt.Print(user.Name)
+	//last
 
 	userHandler := handler.NewUserHandler(userService)
 
@@ -36,6 +51,7 @@ func main() {
 	api := router.Group("/api/v1")
 
 	api.POST("/users", userHandler.RegisterUser)
+	api.POST("/sessions", userHandler.Login)
 
 	router.Run()
 
