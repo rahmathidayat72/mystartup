@@ -53,6 +53,7 @@ func main() {
 	api.POST("/users", userHandler.RegisterUser)
 	api.POST("/sessions", userHandler.Login)
 	api.POST("/email_checker", userHandler.CheckEmail)
+	api.POST("/avatars", userHandler.UploadAvatas)
 
 	router.Run()
 

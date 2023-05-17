@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"start-up-rh/helper"
 	"start-up-rh/user"
@@ -110,6 +111,44 @@ func (h *userHandler) CheckEmail(c *gin.Context) {
 	}
 
 	response := helper.ApiResponse(metaMessages, http.StatusOK, "succest", data)
+
+	c.JSON(http.StatusOK, response)
+
+}
+
+func (h *userHandler) UploadAvatas(c *gin.Context) {
+
+	file, err := c.FormFile("avatar")
+	if err != nil {
+		data := gin.H{"is_uploaded": false}
+		response := helper.ApiResponse("Faile to upload avatar", http.StatusBadRequest, "error", data)
+
+		c.JSON(http.StatusBadRequest, response)
+	}
+
+	// sementara Id user di hardcode sebelum membuat funsi JWT
+	IdUser := 1
+
+	path := fmt.Sprintf("images/%d-%s", IdUser, file.Filename)
+
+	err = c.SaveUploadedFile(file, path)
+	if err != nil {
+		data := gin.H{"is_uploaded": false}
+		response := helper.ApiResponse("Faile to upload avatar", http.StatusBadRequest, "error", data)
+
+		c.JSON(http.StatusBadRequest, response)
+	}
+
+	_, err = h.userService.SaveAvatar(IdUser, path)
+	if err != nil {
+		data := gin.H{"is_uploaded": false}
+		response := helper.ApiResponse("Faile to upload avatar", http.StatusBadRequest, "error", data)
+
+		c.JSON(http.StatusBadRequest, response)
+	}
+
+	data := gin.H{"is_uploaded": true}
+	response := helper.ApiResponse("Succest uploaded avatar", http.StatusOK, "succest", data)
 
 	c.JSON(http.StatusOK, response)
 
