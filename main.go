@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"start-up-rh/auth"
 	"start-up-rh/handler"
 	"start-up-rh/user"
 
@@ -18,6 +20,7 @@ func main() {
 
 	userRepository := user.NewRepository(db)
 	userService := user.NewService(userRepository)
+	authService := auth.NewService()
 
 	//<< untuk mengcek email yang terdaftar di database
 	// userByEmail, err := userRepository.FindByEmail("naro@gmail.com")
@@ -44,7 +47,25 @@ func main() {
 	// fmt.Print(user.Name)
 	//last
 
-	userHandler := handler.NewUserHandler(userService)
+	//code untuk mengecek validita token
+	token, err := authService.ValidateToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyMX0.Q7_FMUNlXJ6lPKaOdpoKbszk4sWUVKvDXP17_Gr0_2s")
+
+	if err != nil {
+		fmt.Println("ERROR")
+		fmt.Println("ERROR")
+	}
+
+	if token.Valid {
+		fmt.Println("Token VALID")
+		fmt.Println("Token VALID")
+	} else {
+		fmt.Println("Token INVALID")
+		fmt.Println("Token INVALID")
+	}
+
+	// last
+
+	userHandler := handler.NewUserHandler(userService, authService)
 
 	router := gin.Default()
 
