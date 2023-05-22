@@ -81,7 +81,7 @@ func (h *userHandler) Login(c *gin.Context) {
 	}
 	formatter := user.FormatUser(logginUsers, token)
 
-	response := helper.ApiResponse("Succestfully loggin", http.StatusOK, "succest", formatter)
+	response := helper.ApiResponse("Succestfully login", http.StatusOK, "succest", formatter)
 
 	c.JSON(http.StatusOK, response)
 
@@ -141,10 +141,10 @@ func (h *userHandler) UploadAvatas(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, response)
 	}
 
-	// sementara Id user di hardcode sebelum membuat funsi JWT
-	IdUser := 1
+	CurrentUser := c.MustGet("currentUser").(user.User)
+	UserId := CurrentUser.Id
 
-	path := fmt.Sprintf("images/%d-%s", IdUser, file.Filename)
+	path := fmt.Sprintf("images/%d-%s", UserId, file.Filename)
 
 	err = c.SaveUploadedFile(file, path)
 	if err != nil {
@@ -154,7 +154,7 @@ func (h *userHandler) UploadAvatas(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, response)
 	}
 
-	_, err = h.userService.SaveAvatar(IdUser, path)
+	_, err = h.userService.SaveAvatar(UserId, path)
 	if err != nil {
 		data := gin.H{"is_uploaded": false}
 		response := helper.ApiResponse("Faile to upload avatar", http.StatusBadRequest, "error", data)
