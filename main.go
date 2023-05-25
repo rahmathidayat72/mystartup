@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"start-up-rh/auth"
+	"start-up-rh/campaign"
 	"start-up-rh/handler"
 	"start-up-rh/helper"
 	"start-up-rh/user"
@@ -24,48 +25,27 @@ func main() {
 	}
 
 	userRepository := user.NewRepository(db)
+	campaignRepository := campaign.NewRepository(db)
+
+	campaigns, _ := campaignRepository.FindById(20)
+
+	fmt.Println("test")
+	fmt.Println("test")
+	fmt.Println("test")
+	fmt.Println(len(campaigns))
+
+	for _, campaigns := range campaigns {
+		fmt.Println(campaigns.Name)
+
+		if len(campaigns.CampaignImages) > 0 {
+			fmt.Println(len(campaigns.CampaignImages))
+			fmt.Println(campaigns.CampaignImages[0].FileName)
+		}
+
+	}
+
 	userService := user.NewService(userRepository)
 	authService := auth.NewService()
-
-	//<< untuk mengcek email yang terdaftar di database
-	// userByEmail, err := userRepository.FindByEmail("naro@gmail.com")
-	// if err != nil {
-	// 	fmt.Println(err.Error())
-	// }
-	// if userByEmail.Id == 0 {
-	// 	fmt.Println("Data user tidak ditemukan")
-	// }
-	// fmt.Println(userByEmail.Name)
-	//last code
-
-	//<< code untuk mengecek kecocokan email dan password
-	// input := user.LoginInput{
-	// 	Email:    "naro@gmail.com",
-	// 	Password: "password",
-	// }
-	// user, err := userService.Login(input)
-	// if err != nil {
-	// 	fmt.Println("terjadi kesalahan")
-	// 	fmt.Println(err.Error())
-	// }
-	// fmt.Println(user.Email)
-	// fmt.Print(user.Name)
-	//last
-
-	//code untuk mengecek validita token
-	token, err := authService.ValidateToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyMX0.Q7_FMUNlXJ6lPKaOdpoKbszk4sWUVKvDXP17_Gr0_2s")
-	if err != nil {
-		fmt.Println("ERROR")
-		fmt.Println("ERROR")
-	}
-	if token.Valid {
-		fmt.Println("Token VALID")
-		fmt.Println("Token VALID")
-	} else {
-		fmt.Println("Token INVALID")
-		fmt.Println("Token INVALID")
-	}
-	// last
 
 	userHandler := handler.NewUserHandler(userService, authService)
 
