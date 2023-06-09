@@ -13,7 +13,7 @@ type CampaignFormatter struct {
 	ImagesURL       string `json:"images_url"`
 	GoalAmmount     int    `json:"goal_ammount"`
 	Perks           string `json:"perks"`
-	CurrentAmmount  int    `json:"current_ammount"`
+	CurrentAmount  int    `json:"current_amount"`
 	Slug            string `json:"slug"`
 }
 
@@ -25,9 +25,9 @@ func FormatCampaign(campaign Campaign) CampaignFormatter {
 	campaignFormatter.Name = campaign.Name
 	campaignFormatter.ShotDescription = campaign.ShortDescription
 	campaignFormatter.Descrtiption = campaign.Description
-	campaignFormatter.GoalAmmount = campaign.GoalAmmount
+	campaignFormatter.GoalAmmount = campaign.GoalAmount
 	campaignFormatter.Perks = campaign.Perks
-	campaignFormatter.CurrentAmmount = campaign.CurrentAmmount
+	campaignFormatter.CurrentAmount = campaign.CurrentAmount
 	campaignFormatter.Slug = campaign.Slug
 	campaignFormatter.ImagesURL = ""
 
@@ -56,8 +56,8 @@ type FormatterCampaignDetail struct {
 	ShortDescription string                    `json:"short_description"`
 	Description      string                    `json:"description"`
 	ImageURL         string                    `json:"image_url"`
-	GoalAmmount      int                       `json:"goal_ammount"`
-	CurrentAmmount   int                       `json:"current_ammount"`
+	GoalAmount      int                       `json:"goal_amount"`
+	CurrentAmount   int                       `json:"current_amount"`
 	Slug             string                    `json:"slug"`
 	Perks            []string                  `json:"perks"`
 	User             UserCampaignFormatter     `json:"user"`
@@ -81,8 +81,8 @@ func FormatDetailCampaign(campaign Campaign) FormatterCampaignDetail {
 	campaignDetailFormatter.Name = campaign.Name
 	campaignDetailFormatter.ShortDescription = campaign.ShortDescription
 	campaignDetailFormatter.Description = campaign.Description
-	campaignDetailFormatter.GoalAmmount = campaign.GoalAmmount
-	campaignDetailFormatter.CurrentAmmount = campaign.CurrentAmmount
+	campaignDetailFormatter.GoalAmount = campaign.GoalAmount
+	campaignDetailFormatter.CurrentAmount = campaign.CurrentAmount
 	campaignDetailFormatter.Slug = campaign.Slug
 	campaignDetailFormatter.ImageURL = ""
 
