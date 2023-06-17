@@ -11,6 +11,6 @@ type User struct {
 	AvatarFileName string
 	Role           string
 	Token          string
-	Created_At     time.Time
-	Updated_At     time.Time
+	CreatedAt      time.Time
+	UpdatedAt      time.Time
 }
