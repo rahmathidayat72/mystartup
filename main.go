@@ -6,6 +6,7 @@ import (
 	"start-up-rh/campaign"
 	"start-up-rh/handler"
 	"start-up-rh/helper"
+	"start-up-rh/transaction"
 	"start-up-rh/user"
 	"strings"
 
@@ -25,12 +26,16 @@ func main() {
 
 	userRepository := user.NewRepository(db)
 	campaignRepository := campaign.NewRepository(db)
+	transactionRepository := transaction.NewRepository(db)
+
 	userService := user.NewService(userRepository)
 	campaignService := campaign.NewService(campaignRepository)
+	transactionService := transaction.NewService(transactionRepository, campaignRepository)
 	authService := auth.NewService()
 
 	userHandler := handler.NewUserHandler(userService, authService)
-	campaignHandelr := handler.NewCampaingHandler(campaignService)
+	campaignHandler := handler.NewCampaingHandler(campaignService)
+	transactionHandler := handler.NewTransactionHandler(transactionService)
 
 	router := gin.Default()
 	router.Static("/images", "./images")
@@ -41,13 +46,13 @@ func main() {
 	api.POST("/email_checker", userHandler.CheckEmail)
 	api.POST("/avatars", authMiddleware(authService, userService), userHandler.UploadAvatas)
 
-	api.GET("/campaigns", campaignHandelr.GetCampaigns)
-	api.GET("/campaigns/:id", campaignHandelr.GetCampaign)
-	api.POST("/campaigns", authMiddleware(authService, userService), campaignHandelr.CreateCampaign)
-	api.PUT("/campaigns/:id", authMiddleware(authService, userService), campaignHandelr.UpdateCampaign)
-	api.POST("/campaigns-image", authMiddleware(authService, userService), campaignHandelr.UploadImage)
+	api.GET("/campaigns", campaignHandler.GetCampaigns)
+	api.GET("/campaigns/:id", campaignHandler.GetCampaign)
+	api.POST("/campaigns", authMiddleware(authService, userService), campaignHandler.CreateCampaign)
+	api.PUT("/campaigns/:id", authMiddleware(authService, userService), campaignHandler.UpdateCampaign)
+	api.POST("/campaigns-image", authMiddleware(authService, userService), campaignHandler.UploadImage)
 
-
+	api.GET("/campaigns/:id/transactions", authMiddleware(authService, userService), transactionHandler.GetTransactionCampaign)
 	router.Run()
 
 }
