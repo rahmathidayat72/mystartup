@@ -1,6 +1,7 @@
 package transaction
 
 import (
+	"start-up-rh/campaign"
 	"start-up-rh/user"
 	"time"
 )
@@ -13,6 +14,7 @@ type Transactions struct {
 	Status     string
 	Code       string
 	User       user.User
+	Campaign   campaign.Campaign
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
 }
